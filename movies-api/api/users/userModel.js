@@ -15,6 +15,17 @@ const UserSchema = new Schema({
       },
       message: "Password must be at least 8 characters long, include a letter, a number, and a special character."
     }
+  },
+  favourites: { type: [Number], default: [] },// 用户收藏的电影列表 (存储 TMDB 的电影 ID)
+  reviews: {
+    type: [
+      {
+        movieId: { type: Number, required: true }, // TMDB 的电影 ID
+        review: { type: String, required: true },  // 用户的评论内容
+        rating: { type: Number, min: 0, max: 10, required: true }, // 用户评分
+      },
+    ],
+    default: [], // 默认初始化为空数组
   }
 });
 
