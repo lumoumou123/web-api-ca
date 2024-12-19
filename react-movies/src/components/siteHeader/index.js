@@ -29,6 +29,8 @@ const SiteHeader = ({ history }) => {
     { label: "Upcoming", path: "/movies/upcoming" },
     { label: "Popular", path: "/movies/popular" },
     { label: "Watch", path: "/movies/watch" },
+    { label: "Login", path: "/login" },   // 添加登录路径
+    { label: "Signup", path: "/signup" } // 添加注册路径
   ];
 
   const handleMenuSelect = (pageURL) => {
