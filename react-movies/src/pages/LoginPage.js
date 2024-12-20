@@ -10,21 +10,26 @@ const LoginPage = () => {
 
   const handleLogin = async () => {
     try {
+      console.log("Attempting login with:", { username, password }); // 打印请求数据
       const response = await axios.post("http://localhost:8080/api/users", {
         username,
         password,
       });
-      const { token } = response.data;
+      console.log("Login response:", response.data); // 打印响应数据
+
+      const { token, userId } = response.data; // 从响应中获取 token 和 userId
 
       if (token) {
-        // 将 JWT token 保存到 localStorage 中
+        // 保存 token 和 userId 到 localStorage
         localStorage.setItem("token", token);
+        localStorage.setItem("userId", userId); // 保存 userId
 
-        // 显示成功信息并跳转到主页
+        console.log("Token and UserId saved to localStorage.");
         setMessage("Login successful!");
-        navigate("/"); // 登录成功后跳转到主页
+        navigate("/"); // 跳转到主页
       }
     } catch (error) {
+      console.error("Login error:", error); // 打印错误信息
       setMessage(
         error.response?.data?.msg || "Login failed. Please check your credentials."
       );
@@ -53,3 +58,4 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
