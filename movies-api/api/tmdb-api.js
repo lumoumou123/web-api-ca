@@ -32,3 +32,11 @@ export const getMovieGenres = async () => {
         throw error;
     }
 };
+
+export const fetchMovieDetails = async (movieId) => {
+    const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${TMDB_API_KEY}`);
+    if (!response.ok) {
+        throw new Error(`Error fetching movie details: ${response.statusText}`);
+    }
+    return response.json();
+};
