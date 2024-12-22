@@ -30,21 +30,33 @@ export const getUpcomingMovies = () => {
   });
 };
 //得到的popularmoviespage
-export const getPopularMovies = () => {
-  return fetch(
-    `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&page=1`
-  ).then((response) => {
+export const getPopularMovies = async () => {
+  try {
+    const token = localStorage.getItem("token"); // 获取存储的 token
+    const response = await fetch("http://localhost:8080/api/movies/tmdb/popular", {
+      headers: {
+        Authorization: token, // 添加 token 到请求头
+        "Content-Type": "application/json",
+      },
+    });
+
     if (!response.ok) {
-      return response.json().then((error) => {
-        throw new Error(error.status_message || "请求出错");
-      });
+      throw new Error(
+        `Failed to fetch popular movies from backend: ${response.statusText}`
+      );
     }
-    return response.json();
-  })
-  .catch((error) => {
-      throw error;
-  });
+
+    return await response.json();
+  } catch (error) {
+    console.error(
+      "Error fetching popular movies from backend:",
+      error.message
+    );
+    throw error;
+  }
 };
+
+
 //得到credits
 export const getMovieCredits = (args) => {
   //console.log(args)

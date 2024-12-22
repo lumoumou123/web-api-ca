@@ -3,7 +3,8 @@ import asyncHandler from 'express-async-handler';
 import express from 'express';
 import {
     getUpcomingMovies,
-    getMovieGenres
+    getMovieGenres,
+    getPopularMovies
   } from '../tmdb-api';
 
 const router = express.Router();
@@ -53,7 +54,16 @@ router.get('/tmdb/upcoming', asyncHandler(async (req, res) => {
         res.status(500).json({ message: 'Failed to fetch upcoming movies from TMDB.', error: error.message });
     }
 }));
-
+// Get popular movies from TMDB
+router.get('/tmdb/popular', asyncHandler(async (req, res) => {
+    try {
+        const popularMovies = await getPopularMovies(); // 调用封装的函数
+        res.status(200).json(popularMovies); // 返回流行电影数据
+    } catch (error) {
+        console.error('Error fetching popular movies:', error.message);
+        res.status(500).json({ message: 'Failed to fetch popular movies from TMDB.', error: error.message });
+    }
+}));
 // 新增：获取电影流派列表
 router.get('/tmdb/genres', asyncHandler(async (req, res) => {
     try {
@@ -65,20 +75,7 @@ router.get('/tmdb/genres', asyncHandler(async (req, res) => {
     }
 }));
 
-//从 TMDB 获取当前流行电影的列表。
-router.get('/popular', asyncHandler(async (req, res) => {
-    const { page = 1 } = req.query;
-    const response = await fetch(
-        `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.TMDB_KEY}&page=${page}`
-    );
 
-    if (!response.ok) {
-        return res.status(response.status).json({ message: 'Failed to fetch popular movies from TMDB.' });
-    }
-
-    const data = await response.json();
-    res.status(200).json(data);
-}));
 
 
 export default router;

@@ -33,6 +33,27 @@ export const getMovieGenres = async () => {
     }
 };
 
+
+// 获取热门电影
+export const getPopularMovies = async () => {
+    try {
+        const response = await fetch(
+            `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.TMDB_KEY}&language=en-US&page=1`
+        );
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || 'Failed to fetch popular movies');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error in getPopularMovies:', error.message);
+        throw error;
+    }
+};
+
+
 export const fetchMovieDetails = async (movieId) => {
     const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${TMDB_API_KEY}`);
     if (!response.ok) {
