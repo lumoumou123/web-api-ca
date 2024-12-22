@@ -29,10 +29,17 @@ const SiteHeader = ({ history }) => {
     { label: "Upcoming", path: "/movies/upcoming" },
     { label: "Popular", path: "/movies/popular" },
     { label: "Watch", path: "/movies/watch" },
-    { label: "Login", path: "/login" },   // 添加登录路径
-    { label: "Signup", path: "/signup" } // 添加注册路径
+    { label: "Login", path: "/login" },
+    { label: "Signup", path: "/signup" },
   ];
-  
+
+  // 添加 Logout 逻辑
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // 移除 token
+    localStorage.removeItem("userId"); // 移除 userId
+    navigate("/login", { replace: true }); // 跳转到登录页面
+  };
+
   const handleMenuSelect = (pageURL) => {
     navigate(pageURL, { replace: true });
   };
@@ -85,6 +92,7 @@ const SiteHeader = ({ history }) => {
                       {opt.label}
                     </MenuItem>
                   ))}
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem> {/* 添加 Logout */}
                 </Menu>
               </>
             ) : (
@@ -98,6 +106,9 @@ const SiteHeader = ({ history }) => {
                     {opt.label}
                   </Button>
                 ))}
+                <Button color="inherit" onClick={handleLogout}>
+                  Logout
+                </Button> {/* 添加 Logout */}
               </>
             )}
         </Toolbar>
