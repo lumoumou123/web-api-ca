@@ -20,3 +20,14 @@ export const getUserFavourites = async (userId) => {
   });
   return response.data;
 };
+
+
+export const getWatchlist = async (userId) => {
+  const token = localStorage.getItem('token');
+  const response = await axios.get(`${BASE_URL}/api/watchlist/${userId}`, {
+      headers: {
+          Authorization: token,
+      },
+  });
+  return response.data;
+};

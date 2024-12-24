@@ -54,6 +54,7 @@ export const getPopularMovies = async () => {
 };
 
 
+
 export const fetchMovieDetails = async (movieId) => {
     const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${TMDB_API_KEY}`);
     if (!response.ok) {
