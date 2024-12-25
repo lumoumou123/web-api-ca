@@ -1,12 +1,13 @@
 import React from "react";
-import { getPopularMovies } from "../api/tmdb-api";
-import PageTemplate from '../components/templateMovieListPage';
 import { useQuery } from 'react-query';
+import PageTemplate from '../components/templateMovieListPage';
 import Spinner from '../components/spinner';
 import AddToPlaylistIcon from '../components/cardIcons/AddToPlaylistIcon';
+import { getPopularMoviesFromBackend } from "../api/backend-api"; // 修改为从后端获取
 
-const PopularMoviesPage = (props) => {
-  const { data, error, isLoading, isError } = useQuery('popular', getPopularMovies);
+const PopularMoviesPage = () => {
+  // 修改使用从后端获取的函数
+  const { data, error, isLoading, isError } = useQuery('popular', getPopularMoviesFromBackend);
 
   if (isLoading) {
     return <Spinner />;
@@ -17,6 +18,7 @@ const PopularMoviesPage = (props) => {
   }
 
   const movies = data.results;
+
   return (
     <PageTemplate
       title="Popular Movies"

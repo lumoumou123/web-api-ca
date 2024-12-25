@@ -17,7 +17,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/users', usersRouter);
 app.use(defaultErrHandler);
-app.use('/api/movies', authenticate, moviesRouter);
+app.use('/api/movies',moviesRouter);
 app.use('/api/watchlist', authenticate,watchlistRouter);
 
 app.listen(port, () => {

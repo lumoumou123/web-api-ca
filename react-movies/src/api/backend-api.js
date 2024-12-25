@@ -31,3 +31,15 @@ export const getWatchlist = async (userId) => {
   });
   return response.data;
 };
+
+// 获取即将上映的电影（从 react-movies 后端 API，无需身份验证）
+export const getUpcomingMoviesFromBackend = async () => {
+  const response = await axios.get(`${BASE_URL}/api/movies/tmdb/upcoming`);
+  return response.data;
+};
+
+// 获取流行电影（从 react-movies 后端 API）
+export const getPopularMoviesFromBackend = async () => {
+  const response = await axios.get(`${BASE_URL}/api/movies/tmdb/popular`);
+  return response.data;
+};

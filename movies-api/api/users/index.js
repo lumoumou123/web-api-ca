@@ -110,7 +110,36 @@ router.post('/:id/favourites', asyncHandler(async (req, res) => {
     }
 }));
 
-  
+
+// 删除用户收藏的电影
+router.delete('/:id/favourites/:movieId', asyncHandler(async (req, res) => {
+    const userId = req.params.id; // 获取用户ID
+    const movieId = req.params.movieId; // 获取电影ID
+
+    // 检查用户是否存在
+    const user = await User.findById(userId);
+    if (!user) {
+        return res.status(404).json({ success: false, msg: 'User not found.' });
+    }
+
+    console.log('Current favourites before removal:', user.favourites);
+
+    // 检查收藏列表中是否包含该电影
+    if (user.favourites.includes(movieId)) {
+        // 从收藏列表中移除电影
+        await User.updateOne(
+            { _id: userId },
+            { $pull: { favourites: movieId } }
+        );
+
+        console.log(`Movie ${movieId} removed from favourites.`);
+        return res.status(200).json({ success: true, msg: 'Movie removed from favourites.' });
+    } else {
+        console.log(`Movie ${movieId} does not exist in favourites.`);
+        return res.status(400).json({ success: false, msg: 'Movie not found in favourites.' });
+    }
+}));
+
   
 //添加电影评论
 router.post('/:id/reviews', asyncHandler(async (req, res) => {
