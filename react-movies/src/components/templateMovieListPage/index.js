@@ -25,8 +25,21 @@ function MovieListPageTemplate({ movies, title, action }) {
       return m.title.toLowerCase().search(nameFilter.toLowerCase()) !== -1;
     })
     .filter((m) => {
-      return genreId > 0 ? m.genre_ids.includes(genreId) : true;
+      if (genreId > 0) {
+        // 检查是否是 genres 对象
+        if (m.genres && Array.isArray(m.genres)) {
+          return m.genres.some((genre) => genre.id === genreId);
+        }
+        // 检查是否是 genre_ids 数组
+        if (m.genre_ids && Array.isArray(m.genre_ids)) {
+          return m.genre_ids.includes(genreId);
+        }
+        // 如果都没有，返回 false
+        return false;
+      }
+      return true; // 如果没有筛选条件，返回所有电影
     })
+    
     .filter((m) => {
       return releaseYearFilter ? m.release_date.startsWith(releaseYearFilter) : true;
     });

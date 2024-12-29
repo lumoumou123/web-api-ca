@@ -53,8 +53,8 @@ router.get('/:id/favourites', asyncHandler(async (req, res) => {
     }
 
     const favourites = user.favourites || [];
-    console.log('Favourites to fetch:', favourites);
 
+    // 使用 Promise.all 并发查询 TMDB 的详细信息
     const movieDetails = await Promise.all(
         favourites.map(async (movieId) => {
             try {
@@ -62,9 +62,7 @@ router.get('/:id/favourites', asyncHandler(async (req, res) => {
                     `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.TMDB_KEY}`
                 );
                 if (response.ok) {
-                    const movie = await response.json();
-                    console.log('Fetched movie:', movie);
-                    return movie;
+                    return await response.json(); // 返回详细信息
                 } else {
                     console.error(`Failed to fetch movie details for ID: ${movieId}`);
                     return null;
@@ -76,9 +74,12 @@ router.get('/:id/favourites', asyncHandler(async (req, res) => {
         })
     );
 
+    // 过滤掉查询失败的电影
     const filteredDetails = movieDetails.filter((movie) => movie !== null);
+
     res.status(200).json({ success: true, favourites: filteredDetails });
 }));
+
 
 
 // 添加电影到用户收藏列表
